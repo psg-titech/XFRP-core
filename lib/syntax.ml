@@ -11,14 +11,12 @@ type annot = ALast
 
 (* node内に現れる数値 *)
 type const = 
-  | CUnit (* これ、使われることあるんか...? *)
   | CBool of bool
   | CInt of int
   | CFloat of float
 [@@deriving show]
 
 let string_of_const :  const -> string = function
-  | CUnit -> ""
   | CBool b -> string_of_bool b
   | CInt i -> string_of_int i
   | CFloat f -> string_of_float f
