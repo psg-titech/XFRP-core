@@ -1,6 +1,5 @@
 (* type representng type *)
 type t = 
-    TUnit
   | TBool
   | TChar
   | TInt
@@ -10,7 +9,6 @@ type t =
 [@@deriving show]
 
 let of_string = function
-  | TUnit  -> "void"
   | TBool  -> "bool"
   | TChar  -> "char"
   | TInt   -> "int"

@@ -62,7 +62,6 @@ prim_type_specific: (* see Type.ml *)
   | t = ID
     {
       match t with
-      | "Unit" -> TUnit
       | "Bool" -> TBool
       | "Char" -> TChar
       | "Int"  -> TInt
