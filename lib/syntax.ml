@@ -25,22 +25,34 @@ let string_of_const :  const -> string = function
 
 type binop = 
   | BAdd
+  | BSub
+  | BMul
+  | BDiv
+  | BMod
   | BEq
+  | BNeq
+  | BAnd
   | BOr
-  | BLte
+  | BLe
   | BLt
-  | BRte
-  | BRt
+  | BGe
+  | BGt
 [@@deriving show]
 
 let string_of_binop : binop -> string =  function
   | BAdd -> "+"
+  | BSub -> "-"
+  | BMul -> "*"
+  | BDiv -> "/"
+  | BMod -> "%"
   | BEq -> "=="
+  | BNeq -> "!="
+  | BAnd -> "&&"
   | BOr -> "||"
-  | BLte -> "<="
+  | BLe -> "<="
   | BLt -> "<"
-  | BRte -> ">="
-  | BRt -> ">"
+  | BGe -> ">="
+  | BGt -> ">"
 
 type expr = 
   | EConst of const
