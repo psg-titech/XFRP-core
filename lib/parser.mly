@@ -73,11 +73,11 @@ prim_type_specific: (* see Type.ml *)
 
 (* definition *)
 definition:
-      | NODE init = option(INIT LBRACKET e = expr RBRACKET { e }) (* node init[0] *)
+      | NODE init = option(INIT LBRACKET ie = init_expr RBRACKET { ie }) (* node init[0] *)
         idt = id_and_type EQUAL e = expr
         { Node(idt,init,e) }
       | FUNCTION id = ID LPAREN args = separated_list(COMMA,id_and_type) RPAREN COLON t = type_specific EQUAL e = expr 
-        { let args_id , args_type = List.split args in Fun((id,(args_type,t)), (args_id,e)) }
+        { let args_id , args_type = List.split args in Fun((id,t,args_id,args_type),e) }
 
 (* Type.expr *)
 expr:
@@ -85,16 +85,29 @@ expr:
       | id = ID         { Eid(id) }
       | id = ID AT a = annotation { EAnnot(id,a) }
       | expr binop expr { Ebin($2,$1,$3) }
-      | IF c = expr THEN  a = expr ELSE b = expr %prec prec_if (* down the priority of if-expression *)
+      | IF c = expr THEN  a = expr ELSE b = expr %prec prec_if (* if-expressionの優先度を下げる *)
     { Eif(c,a,b) }
-      | LPAREN expr RPAREN { $2 }
+      | LPAREN expr RPAREN { $2 } (* TODO 括弧だけど正しく動くのかは不明 *)
+      (* TODO 関数適用 *)
       | id = ID LPAREN args = args RPAREN  { EApp(id,args) }
+
+
 
 annotation:
       | LAST { ALast }
 
 args:
       | separated_list(COMMA,expr)  { $1 }
+
+(* ----- initial value of each node ----- *)
+init_expr:
+      | constant        { EConst($1) }
+      | id = ID LPAREN args = init_args RPAREN  { EApp(id,args) }
+
+init_args:
+      | separated_list(COMMA,init_expr) { $1 }
+
+(* ------------------------------ *)
 
 %inline
 binop:

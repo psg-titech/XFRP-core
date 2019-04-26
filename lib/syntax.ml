@@ -4,6 +4,8 @@ type moduleid = string
 [@@deriving show]
 type id_and_type = id * Type.t
 [@@deriving show]
+type id_and_type_opt = id * Type.t option
+[@@deriving show]
 type annot = ALast
 [@@deriving show]
 
@@ -15,6 +17,12 @@ type const =
   | CFloat of float
 [@@deriving show]
 
+let string_of_const :  const -> string = function
+  | CUnit -> ""
+  | CBool b -> string_of_bool b
+  | CInt i -> string_of_int i
+  | CFloat f -> string_of_float f
+
 type binop = 
   | BAdd
   | BEq
@@ -25,6 +33,15 @@ type binop =
   | BRt
 [@@deriving show]
 
+let string_of_binop : binop -> string =  function
+  | BAdd -> "+"
+  | BEq -> "=="
+  | BOr -> "||"
+  | BLte -> "<="
+  | BLt -> "<"
+  | BRte -> ">="
+  | BRt -> ">"
+
 type expr = 
   | EConst of const
   | Eid of id 
@@ -34,13 +51,10 @@ type expr =
   | EApp of id * expr list
 [@@deriving show]
 
-type function_body = id list * expr (* arguments and body *)
-[@@deriving show]
-
 type definition = 
   | Node of id_and_type (* node id and type *) * expr option (* init *) * expr (* body *)
   | Const of id_and_type * expr
-  | Fun of (id (* function name *) * (Type.t list (* arguments type *) * Type.t (* return type *))) * function_body
+  | Fun of (id * Type.t * id list * Type.t list) * expr 
 [@@deriving show]
 
 
